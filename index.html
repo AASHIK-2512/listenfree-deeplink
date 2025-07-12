@@ -5,7 +5,8 @@
   <title>ListenFree Deep Link Redirect</title>
 </head>
 <body>
-  <h1>Redirecting...</h1>
+  <h1 id="title">Redirecting to ListenFree app...</h1>
+
   <script>
     const url = new URL(window.location.href);
     const type = url.searchParams.get("type");
@@ -18,14 +19,18 @@
     } else if (type === "playlist") {
       deepLink = `listenfree://sharedPlaylist/${id}`;
     } else {
-      // fallback
       deepLink = "listenfree://";
     }
 
+    // Try to open the app
     window.location.href = deepLink;
 
+    // After 2 sec, show message and optional fallback link
     setTimeout(() => {
-      window.location.href = 'https://play.google.com/store/apps/details?id=com.yourapp'; 
+      const title = document.getElementById("title");
+      title.innerText = "It seems you don't have the ListenFree app installed.";
+
+      document.body.appendChild(storeLink);
     }, 2000);
   </script>
 </body>
