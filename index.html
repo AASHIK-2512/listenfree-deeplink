@@ -7,24 +7,26 @@
 <body>
   <h1>Redirecting...</h1>
   <script>
-    // ✅ Correct way: get ?id=... instead of path
-    const params = new URLSearchParams(window.location.search);
-    const sharedId = params.get('id');
+    const url = new URL(window.location.href);
+    const type = url.searchParams.get("type");
+    const id = url.searchParams.get("id");
 
-    if (sharedId) {
-      // Construct your custom scheme link
-      const deepLink = `listenfree://sharedSong/${sharedId}`;
+    let deepLink = "";
 
-      // Redirect to your app
-      window.location.href = deepLink;
-
-      // Fallback: Play Store or homepage after 2 sec
-      setTimeout(() => {
-        window.location.href = 'https://play.google.com/store/apps/details?id=com.yourapp';
-      }, 2000);
+    if (type === "song") {
+      deepLink = `listenfree://sharedSong/${id}`;
+    } else if (type === "playlist") {
+      deepLink = `listenfree://sharedPlaylist/${id}`;
     } else {
-      document.body.innerHTML = "<h1>Invalid link</h1>";
+      // fallback
+      deepLink = "listenfree://";
     }
+
+    window.location.href = deepLink;
+
+    setTimeout(() => {
+      window.location.href = 'https://play.google.com/store/apps/details?id=com.yourapp'; 
+    }, 2000);
   </script>
 </body>
 </html>
